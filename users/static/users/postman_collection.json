@@ -1,0 +1,150 @@
+{
+    "info": {
+        "name": "User Management System API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Register User",
+                    "request": {
+                        "method": "POST",
+                        "url": "http://127.0.0.1:8000/register/",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"testuser\",\n    \"email\": \"test@example.com\",\n    \"password\": \"yourpassword123\",\n    \"phone_number\": \"1234567890\",\n    \"address\": \"123 Test St\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "url": "http://127.0.0.1:8000/login/",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"yourpassword123\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Refresh Token",
+                    "request": {
+                        "method": "POST",
+                        "url": "http://127.0.0.1:8000/token/refresh/",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"refresh\": \"your_refresh_token_here\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "url": "http://127.0.0.1:8000/logout/",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer your_access_token_here"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"refresh\": \"your_refresh_token_here\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "User Management",
+            "item": [
+                {
+                    "name": "List Users",
+                    "request": {
+                        "method": "GET",
+                        "url": "http://127.0.0.1:8000/users/",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer your_access_token_here"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Get User Details",
+                    "request": {
+                        "method": "GET",
+                        "url": "http://127.0.0.1:8000/users/1/",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer your_access_token_here"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Update User",
+                    "request": {
+                        "method": "PUT",
+                        "url": "http://127.0.0.1:8000/users/1/",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer your_access_token_here"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"phone_number\": \"9876543210\",\n    \"address\": \"456 Updated St\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Delete User",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "http://127.0.0.1:8000/users/1/",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer your_access_token_here"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,5 +1,4 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.generic import ListView
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,70 +18,76 @@ class HomeListView(ListView):
     context_object_name = "user_list"
     template_name = "users/home.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(HomeListView, self).get_context_data(**kwargs)
-        return context
-
-def about(request):
-    return render(request, "users/about.html")
 
 
 class RegisterUserView(APIView):
+    """API view for user registration."""
     def post(self, request):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            logger.info(f"New user registered: {serializer.data['username']}")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        logger.warning(f"Registration failed: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserListView(APIView):
+    """API view for listing all users."""
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        logger.debug("UserListView GET request received")
         try:
             users = CustomUser.objects.all()
             serializer = UserSerializer(users, many=True)
-            logger.debug(f"Successfully serialized {len(users)} users")
+            logger.info(f"Retrieved {len(users)} users")
             return Response(serializer.data)
         except Exception as e:
-            logger.error(f"Error in UserListView: {str(e)}")
+            logger.error(f"Error fetching users: {str(e)}")
             return Response(
-                {"error": f"An error occurred while fetching users: {str(e)}"},
+                {"error": "Failed to retrieve users"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
 class UserDetailView(APIView):
+    """API view for retrieving, updating, and deleting individual users."""
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, pk):
+    def get_user(self, pk):
+        """Helper method to get a user by primary key."""
         try:
-            user = CustomUser.objects.get(pk=pk)
+            return CustomUser.objects.get(pk=pk)
         except CustomUser.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        user = self.get_user(pk)
+        if not user:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
     def put(self, request, pk):
-        try:
-            user = CustomUser.objects.get(pk=pk)
-        except CustomUser.DoesNotExist:
+        user = self.get_user(pk)
+        if not user:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            logger.info(f"User {pk} updated successfully")
             return Response(serializer.data)
+        logger.warning(f"User update failed: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        try:
-            user = CustomUser.objects.get(pk=pk)
-        except CustomUser.DoesNotExist:
+        user = self.get_user(pk)
+        if not user:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         user.delete()
-        return Response({'message': 'User deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        logger.info(f"User {pk} deleted successfully")
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class LogoutView(APIView):
+    """API view for user logout."""
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -90,6 +95,17 @@ class LogoutView(APIView):
             refresh_token = request.data['refresh']
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response({'message': 'Logged out successfully'}, status=status.HTTP_205_RESET_CONTENT)
+            logger.info(f"User {request.user.username} logged out successfully")
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except KeyError:
+            logger.warning("Logout failed: No refresh token provided")
+            return Response(
+                {'error': 'Refresh token is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            logger.error(f"Logout error: {str(e)}")
+            return Response(
+                {'error': 'Invalid token'},
+                status=status.HTTP_400_BAD_REQUEST
+            )

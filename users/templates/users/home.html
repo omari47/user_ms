@@ -1,9 +1,69 @@
 {% extends "users/layout.html" %}
+{% load static %}
 {% block title %}
-    Home
+    API Documentation
 {% endblock %}
 {% block content %}
-    <h1>Welcome to User Management</h1>
-    <p>Manage your users efficiently.</p>
-    
+    <h1>User Management System </h1>
+    <p>Welcome to the User Management System . Below are the available API endpoints:</p>
+
+    <div class="api-docs">
+        <h2>Authentication Endpoints</h2>
+        <ul>
+            <li>
+                <strong>Register User:</strong>
+                <code>POST /api/register/</code>
+            </li>
+            <li>
+                <strong>Login (Get Token):</strong>
+                <code>POST /api/token/</code>
+            </li>
+            <li>
+                <strong>Refresh Token:</strong>
+                <code>POST /api/token/refresh/</code>
+            </li>
+            <li>
+                <strong>Logout:</strong>
+                <code>POST /api/logout/</code>
+            </li>
+        </ul>
+
+        <h2>User Management Endpoints</h2>
+        <ul>
+            <li>
+                <strong>List Users:</strong>
+                <code>GET /api/users/</code>
+            </li>
+            <li>
+                <strong>User Details:</strong>
+                <code>GET /api/users/{id}/</code>
+            </li>
+            <li>
+                <strong>Update User:</strong>
+                <code>PUT /api/users/{id}/</code>
+            </li>
+            <li>
+                <strong>Delete User:</strong>
+                <code>DELETE /api/users/{id}/</code>
+            </li>
+        </ul>
+
+        <h2>Authentication Required</h2>
+        <p>All endpoints except Register and Login require authentication. Include the following header with your requests:</p>
+        <pre><code>Authorization: Bearer &lt;your_access_token&gt;</code></pre>
+    </div>
+
+    <div class="api-note">
+        <h3>API Documentation</h3>
+        <p>Download the complete <a href="{% static 'users/postman_collection.json' %}" download>Postman Collection</a> for testing the API.</p>
+    </div>
+
+    <div class="api-info">
+        <h3>Testing the API</h3>
+        <ol>
+            <li>Download and install <a href="https://www.postman.com/downloads/" target="_blank">Postman</a></li>
+            <li>Import the Postman Collection using the link above</li>
+            <li>Start testing the API endpoints!</li>
+        </ol>
+    </div>
 {% endblock %}

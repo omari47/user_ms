@@ -17,15 +17,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 
 urlpatterns = [
-    path("", include("users.urls")),
+    # API routes
+    path('api/', include([
+        path('', include('users.urls')),  # Include user URLs under /api/
+        path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+        path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    ])),
+    
+    # Admin and home page routes
     path('admin/', admin.site.urls),
-    path('api/', include('users.urls')),  # Ensure API routes are included
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('', include('users.urls')),  # Include URLs for home page
 ]
 
 urlpatterns += staticfiles_urlpatterns()

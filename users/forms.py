@@ -1,9 +1,3 @@
 from django import forms
 
-from users.models import LogMessage
-
-
-class LogMessageForm(forms.ModelForm):
-    class Meta:
-        model = LogMessage
-        fields = ("message",)
+# Add any forms you need here
