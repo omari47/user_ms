@@ -1,118 +1,146 @@
 # User Management System
 
-This project is a simple user management system built with Django. It allows for creating, updating, deleting, and managing user accounts, as well as token-based authentication for secure access.
+A robust Django-based user management system that provides REST API endpoints for user authentication, registration, and management. Built with Django REST framework and JWT authentication.
 
-## Project Purpose
-The purpose of this project is to provide a basic user management system with CRUD operations and authentication APIs. It is designed to demonstrate the use of Django and Django REST Framework for building web applications.
+## Features
+
+- User registration and authentication
+- JWT-based token authentication
+- User profile management (CRUD operations)
+- API documentation interface
+- Secure password handling
+- Phone number and address management
 
 ## Stack Used
-- **Backend**: Django, Django REST Framework
+- **Backend**: Django 5.0+, Django REST Framework
 - **Authentication**: JWT (JSON Web Tokens) using `djangorestframework-simplejwt`
-- **Database**: SQLite (default, can be configured for other databases)
-- **Frontend**: Django Admin Panel (for management)
+- **Database**: SQLite (default, configurable for other databases)
+- **Documentation**: Built-in API documentation interface
 
 ## Setup Instructions
 
 1. **Clone the Repository**:
-   ```bash
+   ```powershell
    git clone <repository-url>
-   cd django-template
+   cd user_management_system
    ```
 
-2. **Create a Virtual Environment**:
-   ```bash
+2. **Create and Activate Virtual Environment**:
+   ```powershell
    python -m venv venv
+   .\venv\Scripts\activate
    ```
 
-3. **Activate the Virtual Environment**:
-   - On Windows:
-     ```bash
-     .\venv\Scripts\activate
-     ```
-   - On macOS/Linux:
-     ```bash
-     source venv/bin/activate
-     ```
-
-4. **Install Dependencies**:
-   ```bash
+3. **Install Dependencies**:
+   ```powershell
    pip install -r requirements.txt
    ```
 
-5. **Apply Migrations**:
-   ```bash
+4. **Apply Database Migrations**:
+   ```powershell
    python manage.py migrate
    ```
 
-6. **Create a Superuser**:
-   ```bash
+5. **Create Admin User**:
+   ```powershell
    python manage.py createsuperuser
    ```
 
-7. **Run the Development Server**:
-   ```bash
+6. **Run Development Server**:
+   ```powershell
    python manage.py runserver
    ```
 
-8. **Access the Application**:
+7. **Access the Application**:
    - Admin Panel: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
-   - API Endpoints: [http://127.0.0.1:8000/api/](http://127.0.0.1:8000/api/)
+   - API Documentation: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+   - API Root: [http://127.0.0.1:8000/api/](http://127.0.0.1:8000/api/)
 
 ## API Endpoints
 
-1. **Register a User**:
+1. **User Registration**:
    - URL: `/api/register/`
    - Method: `POST`
-   - Body (JSON):
+   - Body:
      ```json
      {
        "username": "testuser",
        "email": "testuser@example.com",
-       "password": "password123"
+       "password": "password123",
+       "phone_number": "1234567890",
+       "address": "123 Test Street"
      }
      ```
 
-2. **Obtain Token**:
+2. **Authentication (Get Token)**:
    - URL: `/api/token/`
    - Method: `POST`
-   - Body (JSON):
+   - Body:
      ```json
      {
        "username": "testuser",
        "password": "password123"
      }
      ```
+   - Response includes both access and refresh tokens
 
 3. **Refresh Token**:
    - URL: `/api/token/refresh/`
    - Method: `POST`
-   - Body (JSON):
+   - Body:
      ```json
      {
        "refresh": "<refresh_token>"
      }
      ```
 
-4. **List Users**:
-   - URL: `/api/users/`
-   - Method: `GET`
-   - Headers: `Authorization: Bearer <access_token>`
+4. **User Management**:
+   - List Users: `GET /api/users/`
+   - Get User: `GET /api/users/{id}/`
+   - Update User: `PUT /api/users/{id}/`
+   - Delete User: `DELETE /api/users/{id}/`
+   - All require header: `Authorization: Bearer <access_token>`
 
-5. **Retrieve, Update, or Delete a User**:
-   - URL: `/api/users/<user_id>/`
-   - Methods: `GET`, `PUT`, `DELETE`
-   - Headers: `Authorization: Bearer <access_token>`
-
-6. **Logout**:
+5. **Logout**:
    - URL: `/api/logout/`
    - Method: `POST`
-   - Body (JSON):
+   - Requires: `Authorization: Bearer <access_token>`
+   - Body:
      ```json
      {
        "refresh": "<refresh_token>"
      }
      ```
 
-## Notes
-- Ensure you configure any required environment variables in a `.env` file.
-- Use Postman or any API client to test the endpoints and collect JSON responses.
+## Security Features
+
+- Password hashing using Django's authentication system
+- JWT token authentication with refresh capability
+- Token blacklisting on logout
+- CSRF protection
+- Secure password validation
+
+## Development Notes
+
+- Debug mode should be disabled in production
+- Environment variables should be properly configured
+- Use Postman collection (available at home page) for API testing
+- Custom user model includes additional fields for phone and address
+- All API endpoints (except registration and token) require authentication
+
+## Error Handling
+
+The API provides clear error messages for:
+- Invalid credentials
+- Missing required fields
+- Authentication failures
+- Resource not found
+- Permission denied
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
