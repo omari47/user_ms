@@ -1,0 +1,188 @@
+{
+    "info": {
+        "name": "User Management System API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Register User",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"username\": \"testuser\",\n    \"email\": \"testuser@example.com\",\n    \"password\": \"password123\"\n}"
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:8000/api/register/",
+                    "protocol": "http",
+                    "host": ["127.0.0.1"],
+                    "port": "8000",
+                    "path": ["api", "register"]
+                }
+            }
+        },
+        {
+            "name": "Obtain Token",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"password123\"\n}"
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:8000/api/token/",
+                    "protocol": "http",
+                    "host": ["127.0.0.1"],
+                    "port": "8000",
+                    "path": ["api", "token"]
+                }
+            }
+        },
+        {
+            "name": "Refresh Token",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"refresh\": \"<refresh_token>\"\n}"
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:8000/api/token/refresh/",
+                    "protocol": "http",
+                    "host": ["127.0.0.1"],
+                    "port": "8000",
+                    "path": ["api", "token", "refresh"]
+                }
+            }
+        },
+        {
+            "name": "List Users",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer <access_token>"
+                    }
+                ],
+                "url": {
+                    "raw": "http://127.0.0.1:8000/api/users/",
+                    "protocol": "http",
+                    "host": ["127.0.0.1"],
+                    "port": "8000",
+                    "path": ["api", "users"]
+                }
+            }
+        },
+        {
+            "name": "Retrieve User",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer <access_token>"
+                    }
+                ],
+                "url": {
+                    "raw": "http://127.0.0.1:8000/api/users/<user_id>/",
+                    "protocol": "http",
+                    "host": ["127.0.0.1"],
+                    "port": "8000",
+                    "path": ["api", "users", "<user_id>"]
+                }
+            }
+        },
+        {
+            "name": "Update User",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer <access_token>"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"email\": \"updateduser@example.com\"\n}"
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:8000/api/users/<user_id>/",
+                    "protocol": "http",
+                    "host": ["127.0.0.1"],
+                    "port": "8000",
+                    "path": ["api", "users", "<user_id>"]
+                }
+            }
+        },
+        {
+            "name": "Delete User",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer <access_token>"
+                    }
+                ],
+                "url": {
+                    "raw": "http://127.0.0.1:8000/api/users/<user_id>/",
+                    "protocol": "http",
+                    "host": ["127.0.0.1"],
+                    "port": "8000",
+                    "path": ["api", "users", "<user_id>"]
+                }
+            }
+        },
+        {
+            "name": "Logout",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer <access_token>"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"refresh\": \"<refresh_token>\"\n}"
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:8000/api/logout/",
+                    "protocol": "http",
+                    "host": ["127.0.0.1"],
+                    "port": "8000",
+                    "path": ["api", "logout"]
+                }
+            }
+        }
+    ]
+}
